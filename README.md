@@ -10,7 +10,7 @@ git clone https://github.com/your-username/HomeRunVision.git
 
 2. **Install dependencies:**
 ```bash
-cd HomeRunVision
+cd ./HomeRunVision/client
 npm install
 ```
 
