@@ -1,41 +1,45 @@
 import React from 'react';
-import { HeatMapGrid } from 'react-grid-heatmap';
+import { Row, Col } from 'react-bootstrap';
+import "./hotcoldzone.css";
+
+
+function valueToColor(value){
+  var h = ((1 - (parseFloat(value) / 1.0)) * 120).toString(10);
+  return "hsl(" + h + ", 100%, 50%)";
+}
 
 const HotColdZone = ({ data }) => {
-  console.log("unformatted data", data)
+  const trimmedData = Object.fromEntries(
+    Object.entries(data).slice(4).map(([key, value]) => [key, parseFloat(value === '-' ? 0 : value)])
+  );
 
-  const formattedData = Object.entries(data)
-  .slice(4)
-  .map(([zone, battingAverage]) => ({
-    x: parseInt(zone.charAt(1), 10),
-    y: parseInt(zone.charAt(0), 10),
-    value: parseFloat(battingAverage === '-' ? 0 : battingAverage)
-  }));
-
-  console.log("formatted data", formattedData)
-
-  const heatmapData = formattedData.map((row, y) =>
-    row.map((value, x) => ({
-      x,
-      y,
-      value: parseFloat(value === '-' ? 0 : value)
-    }))
-  ).flat();
-
-  console.log("heatmapData", heatmapData);
+  const colorData = {};
+  for (const key in trimmedData) {
+    colorData[key] = valueToColor(trimmedData[key]);
+  }
 
   return (
-    <div>
+    <>
       <h2>Batting Average Heatmap</h2>
-      {/* <HeatMapGrid
-        data={heatmapData}
-        xLabels={['1', '2', '3']}
-        yLabels={['Lower', 'Middle', 'Upper']}
-        cellStyle={(background, value, min, max) => ({
-          background: `rgba(0, 255, 0, ${value})`
-        })}
-      /> */}
-    </div>
+      <div className='plate'> 
+        <Row>
+          <Col className='zone' style={{ backgroundColor: colorData['01'] }}><p>{trimmedData['01']}</p></Col>
+          <Col className='zone' style={{ backgroundColor: colorData['02'] }}><p>{trimmedData['02']}</p></Col>
+          <Col className='zone' style={{ backgroundColor: colorData['03'] }}><p>{trimmedData['03']}</p></Col>
+        </Row>
+        <Row>
+          <Col className='zone' style={{ backgroundColor: colorData['04'] }}><p>{trimmedData['04']}</p></Col>
+          <Col className='zone' style={{ backgroundColor: colorData['05'] }}><p>{trimmedData['05']}</p></Col>
+          <Col className='zone' style={{ backgroundColor: colorData['06'] }}><p>{trimmedData['06']}</p></Col>
+        </Row>
+        <Row>
+          <Col className='zone' style={{ backgroundColor: colorData['07'] }}><p>{trimmedData['07']}</p></Col>
+          <Col className='zone' style={{ backgroundColor: colorData['08'] }}><p>{trimmedData['08']}</p></Col>
+          <Col className='zone' style={{ backgroundColor: colorData['09'] }}><p>{trimmedData['09']}</p></Col>
+        </Row>
+      </div>
+    </>
   );
 }
+
 export default HotColdZone;

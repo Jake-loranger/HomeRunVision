@@ -66,8 +66,7 @@ function App() {
         <Col>
           {loading && <p>Loading...</p>}
           {!loading && data &&
-            // <HotColdZone data={data}/>
-            <pre>{JSON.stringify(data, null, 2)}</pre>
+            <HotColdZone data={data}/>
           }
         </Col>
       </Row>
