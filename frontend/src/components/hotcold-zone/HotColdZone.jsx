@@ -1,45 +1,51 @@
 import React from 'react';
-import { Row, Col } from 'react-bootstrap';
-import "./hotcoldzone.css";
+import Plot from 'react-plotly.js';
 
 
-function valueToColor(value){
-  var h = ((1 - (parseFloat(value) / 1.0)) * 120).toString(10);
-  return "hsl(" + h + ", 100%, 50%)";
-}
 
 const HotColdZone = ({ data }) => {
   const trimmedData = Object.fromEntries(
-    Object.entries(data).slice(4).map(([key, value]) => [key, parseFloat(value === '-' ? 0 : value)])
+    Object.entries(data).slice(4).map(([key, value]) => [key, parseFloat(value === '-' ? null : value)])
   );
 
-  const colorData = {};
-  for (const key in trimmedData) {
-    colorData[key] = valueToColor(trimmedData[key]);
-  }
+  const zData = [
+    [trimmedData["01"], trimmedData["02"], trimmedData["03"]],
+    [trimmedData["04"], trimmedData["05"], trimmedData["06"]],
+    [trimmedData["07"], trimmedData["08"], trimmedData["09"]]
+  ];
 
-  return (
-    <>
-      <h2>Batting Average Heatmap</h2>
-      <div className='plate'> 
-        <Row>
-          <Col className='zone' style={{ backgroundColor: colorData['01'] }}><p>{trimmedData['01']}</p></Col>
-          <Col className='zone' style={{ backgroundColor: colorData['02'] }}><p>{trimmedData['02']}</p></Col>
-          <Col className='zone' style={{ backgroundColor: colorData['03'] }}><p>{trimmedData['03']}</p></Col>
-        </Row>
-        <Row>
-          <Col className='zone' style={{ backgroundColor: colorData['04'] }}><p>{trimmedData['04']}</p></Col>
-          <Col className='zone' style={{ backgroundColor: colorData['05'] }}><p>{trimmedData['05']}</p></Col>
-          <Col className='zone' style={{ backgroundColor: colorData['06'] }}><p>{trimmedData['06']}</p></Col>
-        </Row>
-        <Row>
-          <Col className='zone' style={{ backgroundColor: colorData['07'] }}><p>{trimmedData['07']}</p></Col>
-          <Col className='zone' style={{ backgroundColor: colorData['08'] }}><p>{trimmedData['08']}</p></Col>
-          <Col className='zone' style={{ backgroundColor: colorData['09'] }}><p>{trimmedData['09']}</p></Col>
-        </Row>
-      </div>
-    </>
-  );
+  var plotData = [
+    {
+      z: zData,
+      type: 'heatmap',
+      // cmin: 0,      
+      // cmax: 1,   
+      colorscale: [
+        [0, 'blue'],
+        [0.25, 'white'],
+        [1, 'red']  
+      ], 
+      showscale: true,
+      hoverongaps: false
+    }
+  ];
+
+  const layout = {
+    title: 'Batting Average by Zone',
+    xaxis: {
+      tickvals: [0, 1, 2],
+      ticktext: ['Left', 'Center', 'Right']
+    },
+    yaxis: {
+      tickvals: [0, 1, 2],
+      ticktext: ['Bottom', 'Middle', 'Top'],
+      autorange: 'reversed'
+    },
+    width: 600,
+    height: 600
+  };
+
+  return <Plot data={plotData} layout={layout} config={{ displayModeBar: false }} />;
 }
 
 export default HotColdZone;
