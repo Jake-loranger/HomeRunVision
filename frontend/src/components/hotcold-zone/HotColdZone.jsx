@@ -18,8 +18,8 @@ const HotColdZone = ({ data }) => {
     {
       z: zData,
       type: 'heatmap',
-      // cmin: 0,      
-      // cmax: 1,   
+      cmin: 0,      
+      cmax: 1,   
       colorscale: [
         [0, 'blue'],
         [0.25, 'white'],
@@ -38,8 +38,7 @@ const HotColdZone = ({ data }) => {
     },
     yaxis: {
       tickvals: [0, 1, 2],
-      ticktext: ['Bottom', 'Middle', 'Top'],
-      autorange: 'reversed'
+      ticktext: ['Bottom', 'Middle', 'Top']
     },
     width: 600,
     height: 600
