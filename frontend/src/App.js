@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import './App.css';
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Row, Col, Stack } from 'react-bootstrap';
-import { HotColdZone } from './components'; 
+import { HotColdZone } from './components';
+import bg from "./assets/img/fenway-bg.png";
 
 function App() {
   const [playerName, setPlayerName] = useState('');
@@ -25,8 +26,6 @@ function App() {
       .then(data => {
         setData(data);
         setLoading(false);
-        setPlayerName('');
-        setYear('');
       })
       .catch(error => {
         console.error('Error fetching data:', error);
@@ -35,38 +34,43 @@ function App() {
   };
 
   return (
-    <div className="App">
+    <div className="App bg" style={{ backgroundImage: `url(${bg})` }}>
       <Row>
-        <h1 className='m-5'>Hot Cold Zone Data</h1>
+        <h1 className='p-2'>StrikeZoneTracker</h1>
+        <h6>Visualize your favorite players' batting averages across sections of the strike zone</h6>
       </Row>
-      <Row>
-        <Col>
+      <Row >
+        <Col className='form-container me-5'>
           <form onSubmit={handleSubmit}>
-            <Stack>
-              <label>
-                Enter a baseball player name:
-                <input
-                  type="text"
-                  value={playerName}
-                  onChange={(e) => setPlayerName(e.target.value)}
-                />
-              </label>
-              <label>
-                Enter a year:
-                <input
-                  type="text"
-                  value={year}
-                  onChange={(e) => setYear(e.target.value)}
-                />
-              </label>
-              <button type='submit'>Get Player Stats</button>
+            <Stack gap={4} className='px-4 my-5 align-items-end'>
+              <input
+                type="text"
+                placeholder="Enter players' name"
+                value={playerName}
+                onChange={(e) => setPlayerName(e.target.value)}
+              />
+              <input
+                type="text"
+                placeholder='Enter a year'
+                value={year}
+                onChange={(e) => setYear(e.target.value)}
+              />
+              <button className='view-btn' type='submit'>View</button>
             </Stack>
           </form>
         </Col>
-        <Col>
-          {loading && <p>Loading...</p>}
+        <Col className='ms-5'>
+          {loading &&
+            <div className='placeholder-zone-loading'>
+              <div className='spinner'></div>
+            </div>}
           {!loading && data &&
-            <HotColdZone data={data}/>
+            <HotColdZone data={data} playerName={playerName} year={year}/>
+          }
+          {!loading && !data &&
+            <div className='placeholder-zone'>
+              <div className='pt-3'>Batting Average by Zone</div>
+            </div>
           }
         </Col>
       </Row>
