@@ -1,16 +1,16 @@
-## HomeRunVision
+## StrikeZoneTracker
 HomeRunVision is a React web application designed to visualize home run data for baseball players. Using the MLB Stats API, users can input a player's name to retrieve information about the home runs they've hit.
 
 # Usage
 
 1. **Clone the repository:**
 ```bash
-git clone https://github.com/your-username/HomeRunVision.git
+git clone https://github.com/your-username/StrikeZoneTracker.git
 ```
 
 2. **Install dependencies:**
 ```bash
-cd ./HomeRunVision/client
+cd ./StrikeZoneTracker/client
 npm install
 ```
 
